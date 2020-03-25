@@ -1,1 +1,1 @@
-# Bitcoin-Price-Forecasting
+# Exploring the Influence of News Articles on Bitcoin Price
