@@ -5,9 +5,20 @@ from PyQt5.QtGui import QIcon
 import pandas as pd
 import numpy as np
 
+from config.variables import INITIAL_BTC_PRICE
+from config.variables import MESSAGE_DAILY_STATUS
+from config.variables import MESSAGE_RESULT
+from config.variables import MESSAGE_PERIOD
+from config.variables import MESSAGE_AVERAGE
+from config.variables import MESSAGE_COUNT
+from config.variables import MESSAGE_DEFAULT
+from config.variables import INCREASE
+from config.variables import DECREASE
+
 from util.model_functions import get_model
 from util.model_functions import get_predictions
 from util.model_functions import get_price_data
+from util.model_functions import init_model
 
 
 class Ui_MainWindow(QDialog):
@@ -236,10 +247,10 @@ class Ui_MainWindow(QDialog):
         firstFile = filenames[0]
 
         if (id == self.TEST_SET_X):
-            print('testSet: ' + firstFile)
+            print('X_test: ' + firstFile)
             self.lineEdit_X_test.setText(firstFile)
         else:
-            print('trainingSet: ' + firstFile)
+            print('y_test: ' + firstFile)
             self.lineEdit_Y_test.setText(firstFile)
 
     def deposit(self):
@@ -274,89 +285,86 @@ class Ui_MainWindow(QDialog):
     def start(self):
         self.textEdit_log.setText("")
 
-        self.CURRENT_BTC_PRICE = 5095.76
-        self.INITIAL_BTC_PRICE = 5095.76
+        self.CURRENT_BTC_PRICE = INITIAL_BTC_PRICE
 
         self.x_test_path = self.lineEdit_X_test.text()
         self.y_test_path = self.lineEdit_Y_test.text()
 
         if self.isValid():
-            if self.radioButton_CNNLSTM.isChecked():
-                model = get_model(self.CNN_LSTM)
-                self.predictions = get_predictions(model, self.x_test_path, self.CNN_LSTM)
-                self.actual_movements = np.loadtxt(self.y_test_path, delimiter=',')
-            else:
-                model = get_model(self.SENTIMENT_LSTM)
-                self.predictions = get_predictions(model, self.x_test_path, self.SENTIMENT_LSTM)
-                self.actual_movements = pd.read_csv(self.y_test_path).values
-
-                print(self.actual_movements[0])
-
+            init_model(self)
             self.trueCount = 0
-            self.price_data, self.total = get_price_data()
-
-            for i in range(0, len(self.price_data)):
+            for i in range(0, self.last):
+                # Daily BTC-USD
                 self.CURRENT_BTC_PRICE = self.price_data[i][6]
 
+                # Price movement
                 if self.price_data[i][-1] == 1:
-                    self.ACUTAL_MOVEMENT = "BUY"
+                    self.ACUTAL_MOVEMENT = INCREASE
                 else:
-                    self.ACUTAL_MOVEMENT = "SELL"
+                    self.ACUTAL_MOVEMENT = DECREASE
+
+                # Date and Percent change
                 self.DATE = self.price_data[i][0]
                 self.CHANGE = self.price_data[i][-4]
 
-                if self.actual_movements[i] == 1:
-                    self.CURRENT_MOVEMENT_PREDICTION = "BUY"
+                # Movement prediction
+                if self.predictions[i] == 1:
+                    self.CURRENT_MOVEMENT_PREDICTION = INCREASE
                     self.update_balance()
                 else:
-                    self.CURRENT_MOVEMENT_PREDICTION = "SELL"
+                    self.CURRENT_MOVEMENT_PREDICTION = DECREASE
 
                 if self.CURRENT_MOVEMENT_PREDICTION == self.ACUTAL_MOVEMENT:
                     self.trueCount += 1
 
-                self.print_log()
+                self.print_log(MESSAGE_DAILY_STATUS)
 
-        self.textEdit_log.setText(self.textEdit_log.toPlainText() + "\n" + "initial BTC price = {:2}, "
-                                                                           "current BTC price = {:2}, "
-                                                                           "total profit without using the model = {:2}".format(
-            self.INITIAL_BTC_PRICE,
-            self.CURRENT_BTC_PRICE,
-            self.without_using_the_model()))
-
-        self.total_profit = round(self.balance_usd - self.INITIAL_BALANCE_USER, 2)
-        self.textEdit_log.setText(
-            self.textEdit_log.toPlainText() + "\n" + "period = " + str(len(self.price_data)) + " days")
-        self.textEdit_log.setText(self.textEdit_log.toPlainText() + "\n" + "average daily profit = {:2}, "
-                                                                           "average weekly profit = {:2}, "
-                                                                           "average monthly profit = {:2}".format(
-            self.total_profit / len(self.price_data),
-            self.total_profit / (len(self.price_data) / 7),
-            self.total_profit / (len(self.price_data) / 30)))
-
-        self.textEdit_log.setText(
-            self.textEdit_log.toPlainText() + "\n" + "Total: {}, True: {}, False: {}".format(self.total, self.trueCount,
-                                                                                             self.total - self.trueCount))
+        self.print_log(MESSAGE_PERIOD)
+        self.print_log(MESSAGE_RESULT)
+        self.print_log(MESSAGE_AVERAGE)
+        self.print_log(MESSAGE_COUNT)
 
     def without_using_the_model(self):
         initial_btc_amount = self.INITIAL_BALANCE_USER / self.INITIAL_BTC_PRICE
         current_money = initial_btc_amount * self.CURRENT_BTC_PRICE
         return str(self.INITIAL_BALANCE_USER - current_money)
 
-    def print_log(self):
-        message = "date = {}, " \
-                  "prediction =  {:4}, " \
-                  "actual = {:4}, " \
-                  "price_change = {:5}, " \
-                  "current_balance = ${:2}, " \
-                  "total_profit = {:5}".format(self.DATE,
-                                               str(self.CURRENT_MOVEMENT_PREDICTION),
-                                               str(self.ACUTAL_MOVEMENT),
-                                               str(self.CHANGE),
-                                               str(self.balance_usd),
-                                               str(round(self.balance_usd - self.INITIAL_BALANCE_USER, 2))
-                                               )
+    def print_log(self, message_code):
+        self.textEdit_log.setText(self.textEdit_log.toPlainText() + self.get_message(message_code))
 
-        self.textEdit_log.setText(self.textEdit_log.toPlainText() + message + "\n")
+    def get_message(self, message_code):
+        return {
+            MESSAGE_DAILY_STATUS: "date = {}, " \
+                                  "prediction =  {:4}, " \
+                                  "actual = {:4}, " \
+                                  "price_change = {:5}, " \
+                                  "current_balance = ${:2}, " \
+                                  "total_profit = {:5} \n".format(self.DATE,
+                                                                  str(self.CURRENT_MOVEMENT_PREDICTION),
+                                                                  str(self.ACUTAL_MOVEMENT),
+                                                                  str(self.CHANGE),
+                                                                  str(self.balance_usd),
+                                                                  str(round(
+                                                                      self.balance_usd - self.INITIAL_BALANCE_USER, 2))
+                                                                  ),
+            MESSAGE_RESULT: "\n" + "initial BTC price = {:2}, "
+                                   "current BTC price = {:2}, "
+                                   "total profit without using the model = {:2}".format(
+                self.INITIAL_BTC_PRICE,
+                self.CURRENT_BTC_PRICE,
+                self.without_using_the_model()),
+            MESSAGE_PERIOD: "\n" + "test period = " + str(len(self.price_data)) + " days",
+            MESSAGE_AVERAGE: "\n" + "average daily profit = {:2}, "
+                                    "average weekly profit = {:2}, "
+                                    "average monthly profit = {:2}".format(
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / len(self.price_data),
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (len(self.price_data) / 7),
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (len(self.price_data) / 30)),
+            MESSAGE_COUNT: "\n" + "Total: {}, True: {}, False: {}".format(self.total, self.trueCount,
+                                                                          self.total - self.trueCount),
+            MESSAGE_DEFAULT: ""
+
+        }.get(message_code, MESSAGE_DEFAULT)
 
     def isValid(self):
         if len(self.x_test_path) > 0 and len(self.y_test_path) > 0:
