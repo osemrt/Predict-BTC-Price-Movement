@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>The Influence of News on Bitcoin Price</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -170,7 +170,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Predict BTC Price Movement</string>
+        <string>The Influence of News on Bitcoin Price</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

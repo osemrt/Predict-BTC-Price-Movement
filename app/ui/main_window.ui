@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>774</width>
-    <height>564</height>
+    <width>778</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Project Results</string>
+   <string>The Influence of News on Bitcoin Price</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -30,7 +30,7 @@
       <x>20</x>
       <y>20</y>
       <width>740</width>
-      <height>501</height>
+      <height>471</height>
      </rect>
     </property>
     <property name="orientation">
@@ -45,7 +45,7 @@
       </font>
      </property>
      <property name="title">
-      <string>Upload Datasets</string>
+      <string/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -78,13 +78,13 @@
            </font>
           </property>
           <property name="text">
-           <string>x_test</string>
+           <string>Test data</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
-         <widget class="QLineEdit" name="lineEdit_X_test">
+         <widget class="QLineEdit" name="lineEdit_testData">
           <property name="minimumSize">
            <size>
             <width>300</width>
@@ -99,7 +99,7 @@
            </font>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_X_test">
+         <widget class="QPushButton" name="pushButton_testData">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -149,13 +149,13 @@
            </font>
           </property>
           <property name="text">
-           <string>y_test</string>
+           <string>Predictions</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
-         <widget class="QLineEdit" name="lineEdit_Y_test">
+         <widget class="QLineEdit" name="lineEdit_predictions">
           <property name="minimumSize">
            <size>
             <width>300</width>
@@ -170,7 +170,7 @@
            </font>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_Y_test">
+         <widget class="QPushButton" name="pushButton_predictions">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -207,81 +207,6 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="minimumSize">
-        <size>
-         <width>172</width>
-         <height>94</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>172</width>
-         <height>94</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="title">
-        <string>Select a model</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QSplitter" name="splitter_5">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <widget class="QRadioButton" name="radioButton_CNNLSTM">
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>140</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>CNN-LSTM</string>
-           </property>
-          </widget>
-          <widget class="QRadioButton" name="radioButton_SentimentLSTM">
-           <property name="minimumSize">
-            <size>
-             <width>140</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>140</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Sentiment-LSTM</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="minimumSize">
         <size>
@@ -309,7 +234,7 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="label_balance">
            <property name="minimumSize">
             <size>
              <width>300</width>
@@ -328,7 +253,7 @@
             </font>
            </property>
            <property name="text">
-            <string>0.00000064 BTC / $1000.00</string>
+            <string>0.00000000 BTC / $0.00</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -364,71 +289,78 @@
       </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_5">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>415</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
        </font>
       </property>
       <property name="title">
-       <string>Options</string>
+       <string/>
       </property>
-      <widget class="QPushButton" name="pushButton_setStopLoss">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>40</y>
-         <width>200</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Set Stop Loss</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QPushButton" name="pushButton_setStopLoss">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>430</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Set Stop Loss</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_start">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>430</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Start</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
-    </widget>
-    <widget class="QPushButton" name="pushButton_start">
-     <property name="minimumSize">
-      <size>
-       <width>740</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>740</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Start</string>
-     </property>
     </widget>
     <widget class="QTextEdit" name="textEdit_log">
      <property name="minimumSize">
@@ -451,7 +383,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>774</width>
+     <width>778</width>
      <height>21</height>
     </rect>
    </property>
