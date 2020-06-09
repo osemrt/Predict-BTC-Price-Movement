@@ -101,9 +101,9 @@ class Ui_FirstWindow(object):
 
     def retranslateUi(self, FirstWindow):
         _translate = QtCore.QCoreApplication.translate
-        FirstWindow.setWindowTitle(_translate("FirstWindow", "Exploring the Influence of News on Bitcoin Price"))
+        FirstWindow.setWindowTitle(_translate("FirstWindow", "The Influence of News on Bitcoin Price"))
         self.CourseQLabel.setText(_translate("FirstWindow", "Computer Project"))
-        self.ProgramQLabel.setText(_translate("FirstWindow", "Predict BTC Price Movement"))
+        self.ProgramQLabel.setText(_translate("FirstWindow", "The Influence of News on Bitcoin Price"))
         self.NextQPushButton.setText(_translate("FirstWindow", "NEXT"))
 
     def open_window(self):
@@ -116,6 +116,7 @@ class Ui_FirstWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     FirstWindow = QtWidgets.QMainWindow()
     ui = Ui_FirstWindow()

@@ -1,32 +1,21 @@
+import numpy as np
+import pandas as pd
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QDialog, QInputDialog, QLineEdit, QMessageBox
-from PyQt5.QtGui import QIcon
 
-import pandas as pd
-import numpy as np
-
-from config.variables import INITIAL_BTC_PRICE
-from config.variables import MESSAGE_DAILY_STATUS
-from config.variables import MESSAGE_RESULT
-from config.variables import MESSAGE_PERIOD
-from config.variables import MESSAGE_AVERAGE
-from config.variables import MESSAGE_COUNT
-from config.variables import MESSAGE_DEFAULT
-from config.variables import INCREASE
-from config.variables import DECREASE
-
-from util.model_functions import get_model
-from util.model_functions import get_predictions
-from util.model_functions import get_price_data
-from util.model_functions import init_model
+from config.variables import *
+from movements_window import Ui_MovementsWindow
+from util.json import save
+from util.plot import plot_movements
 
 
 class Ui_MainWindow(QDialog):
     def setupUi(self, MainWindow):
-        self.CURRENT_BTC_PRICE = 5095.76
-        self.INITIAL_BTC_PRICE = 5095.76
+
+        self.current_bitcoin_price = INITIAL_BITCOIN_PRICE
+
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(774, 564)
+        MainWindow.resize(778, 543)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("img/ytu_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -34,7 +23,7 @@ class Ui_MainWindow(QDialog):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.splitter_7 = QtWidgets.QSplitter(self.centralwidget)
-        self.splitter_7.setGeometry(QtCore.QRect(20, 20, 740, 501))
+        self.splitter_7.setGeometry(QtCore.QRect(20, 20, 740, 471))
         self.splitter_7.setOrientation(QtCore.Qt.Vertical)
         self.splitter_7.setObjectName("splitter_7")
         self.groupBox_2 = QtWidgets.QGroupBox(self.splitter_7)
@@ -43,6 +32,7 @@ class Ui_MainWindow(QDialog):
         font.setBold(False)
         font.setWeight(50)
         self.groupBox_2.setFont(font)
+        self.groupBox_2.setTitle("")
         self.groupBox_2.setObjectName("groupBox_2")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -62,23 +52,23 @@ class Ui_MainWindow(QDialog):
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-        self.lineEdit_X_test = QtWidgets.QLineEdit(self.splitter)
-        self.lineEdit_X_test.setMinimumSize(QtCore.QSize(300, 30))
+        self.lineEdit_testData = QtWidgets.QLineEdit(self.splitter)
+        self.lineEdit_testData.setMinimumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_X_test.setFont(font)
-        self.lineEdit_X_test.setObjectName("lineEdit_X_test")
-        self.pushButton_X_test = QtWidgets.QPushButton(self.splitter)
-        self.pushButton_X_test.setMinimumSize(QtCore.QSize(120, 30))
-        self.pushButton_X_test.setMaximumSize(QtCore.QSize(120, 30))
+        self.lineEdit_testData.setFont(font)
+        self.lineEdit_testData.setObjectName("lineEdit_testData")
+        self.pushButton_testData = QtWidgets.QPushButton(self.splitter)
+        self.pushButton_testData.setMinimumSize(QtCore.QSize(120, 30))
+        self.pushButton_testData.setMaximumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_X_test.setFont(font)
-        self.pushButton_X_test.setObjectName("pushButton_X_test")
+        self.pushButton_testData.setFont(font)
+        self.pushButton_testData.setObjectName("pushButton_testData")
         self.splitter_3 = QtWidgets.QSplitter(self.splitter_4)
         self.splitter_3.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_3.setObjectName("splitter_3")
@@ -92,23 +82,23 @@ class Ui_MainWindow(QDialog):
         self.label_4.setFont(font)
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_4.setObjectName("label_4")
-        self.lineEdit_Y_test = QtWidgets.QLineEdit(self.splitter_3)
-        self.lineEdit_Y_test.setMinimumSize(QtCore.QSize(300, 30))
+        self.lineEdit_predictions = QtWidgets.QLineEdit(self.splitter_3)
+        self.lineEdit_predictions.setMinimumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_Y_test.setFont(font)
-        self.lineEdit_Y_test.setObjectName("lineEdit_Y_test")
-        self.pushButton_Y_test = QtWidgets.QPushButton(self.splitter_3)
-        self.pushButton_Y_test.setMinimumSize(QtCore.QSize(120, 30))
-        self.pushButton_Y_test.setMaximumSize(QtCore.QSize(120, 30))
+        self.lineEdit_predictions.setFont(font)
+        self.lineEdit_predictions.setObjectName("lineEdit_predictions")
+        self.pushButton_predictions = QtWidgets.QPushButton(self.splitter_3)
+        self.pushButton_predictions.setMinimumSize(QtCore.QSize(120, 30))
+        self.pushButton_predictions.setMaximumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_Y_test.setFont(font)
-        self.pushButton_Y_test.setObjectName("pushButton_Y_test")
+        self.pushButton_predictions.setFont(font)
+        self.pushButton_predictions.setObjectName("pushButton_predictions")
         self.verticalLayout.addWidget(self.splitter_4)
         self.splitter_9 = QtWidgets.QSplitter(self.splitter_7)
         self.splitter_9.setOrientation(QtCore.Qt.Horizontal)
@@ -116,33 +106,6 @@ class Ui_MainWindow(QDialog):
         self.splitter_6 = QtWidgets.QSplitter(self.splitter_9)
         self.splitter_6.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_6.setObjectName("splitter_6")
-        self.groupBox = QtWidgets.QGroupBox(self.splitter_6)
-        self.groupBox.setMinimumSize(QtCore.QSize(172, 94))
-        self.groupBox.setMaximumSize(QtCore.QSize(172, 94))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.groupBox.setFont(font)
-        self.groupBox.setObjectName("groupBox")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.splitter_5 = QtWidgets.QSplitter(self.groupBox)
-        self.splitter_5.setOrientation(QtCore.Qt.Vertical)
-        self.splitter_5.setObjectName("splitter_5")
-        self.radioButton_CNNLSTM = QtWidgets.QRadioButton(self.splitter_5)
-        self.radioButton_CNNLSTM.setMinimumSize(QtCore.QSize(140, 20))
-        self.radioButton_CNNLSTM.setMaximumSize(QtCore.QSize(140, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.radioButton_CNNLSTM.setFont(font)
-        self.radioButton_CNNLSTM.setObjectName("radioButton_CNNLSTM")
-        self.radioButton_SentimentLSTM = QtWidgets.QRadioButton(self.splitter_5)
-        self.radioButton_SentimentLSTM.setMinimumSize(QtCore.QSize(140, 20))
-        self.radioButton_SentimentLSTM.setMaximumSize(QtCore.QSize(140, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.radioButton_SentimentLSTM.setFont(font)
-        self.radioButton_SentimentLSTM.setObjectName("radioButton_SentimentLSTM")
-        self.verticalLayout_2.addWidget(self.splitter_5)
         self.groupBox_3 = QtWidgets.QGroupBox(self.splitter_6)
         self.groupBox_3.setMinimumSize(QtCore.QSize(320, 94))
         self.groupBox_3.setMaximumSize(QtCore.QSize(320, 94))
@@ -155,14 +118,14 @@ class Ui_MainWindow(QDialog):
         self.splitter_2 = QtWidgets.QSplitter(self.groupBox_3)
         self.splitter_2.setOrientation(QtCore.Qt.Vertical)
         self.splitter_2.setObjectName("splitter_2")
-        self.label_10 = QtWidgets.QLabel(self.splitter_2)
-        self.label_10.setMinimumSize(QtCore.QSize(300, 20))
-        self.label_10.setMaximumSize(QtCore.QSize(300, 45652))
+        self.label_balance = QtWidgets.QLabel(self.splitter_2)
+        self.label_balance.setMinimumSize(QtCore.QSize(300, 20))
+        self.label_balance.setMaximumSize(QtCore.QSize(300, 45652))
         font = QtGui.QFont()
         font.setPointSize(12)
-        self.label_10.setFont(font)
-        self.label_10.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_10.setObjectName("label_10")
+        self.label_balance.setFont(font)
+        self.label_balance.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_balance.setObjectName("label_balance")
         self.pushButton_deposit = QtWidgets.QPushButton(self.splitter_2)
         self.pushButton_deposit.setMinimumSize(QtCore.QSize(120, 30))
         self.pushButton_deposit.setMaximumSize(QtCore.QSize(300, 30))
@@ -174,36 +137,42 @@ class Ui_MainWindow(QDialog):
         self.pushButton_deposit.setObjectName("pushButton_deposit")
         self.verticalLayout_3.addWidget(self.splitter_2)
         self.groupBox_5 = QtWidgets.QGroupBox(self.splitter_9)
+        self.groupBox_5.setEnabled(True)
+        self.groupBox_5.setMaximumSize(QtCore.QSize(415, 16777215))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.groupBox_5.setFont(font)
+        self.groupBox_5.setTitle("")
         self.groupBox_5.setObjectName("groupBox_5")
-        self.pushButton_setStopLoss = QtWidgets.QPushButton(self.groupBox_5)
-        self.pushButton_setStopLoss.setGeometry(QtCore.QRect(20, 40, 200, 30))
-        self.pushButton_setStopLoss.setMinimumSize(QtCore.QSize(200, 30))
-        self.pushButton_setStopLoss.setMaximumSize(QtCore.QSize(200, 30))
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_5)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.pushButton_showMovements = QtWidgets.QPushButton(self.groupBox_5)
+        self.pushButton_showMovements.setMinimumSize(QtCore.QSize(200, 30))
+        self.pushButton_showMovements.setMaximumSize(QtCore.QSize(430, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_setStopLoss.setFont(font)
-        self.pushButton_setStopLoss.setObjectName("pushButton_setStopLoss")
-        self.pushButton_start = QtWidgets.QPushButton(self.splitter_7)
-        self.pushButton_start.setMinimumSize(QtCore.QSize(740, 30))
-        self.pushButton_start.setMaximumSize(QtCore.QSize(740, 30))
+        self.pushButton_showMovements.setFont(font)
+        self.pushButton_showMovements.setObjectName("pushButton_showMovements")
+        self.verticalLayout_5.addWidget(self.pushButton_showMovements)
+        self.pushButton_start = QtWidgets.QPushButton(self.groupBox_5)
+        self.pushButton_start.setMinimumSize(QtCore.QSize(200, 30))
+        self.pushButton_start.setMaximumSize(QtCore.QSize(430, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
+        self.verticalLayout_5.addWidget(self.pushButton_start)
         self.textEdit_log = QtWidgets.QTextEdit(self.splitter_7)
         self.textEdit_log.setMinimumSize(QtCore.QSize(740, 250))
         self.textEdit_log.setMaximumSize(QtCore.QSize(740, 250))
         self.textEdit_log.setObjectName("textEdit_log")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 774, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 778, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -213,60 +182,51 @@ class Ui_MainWindow(QDialog):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.TEST_SET_Y = 1
-        self.TEST_SET_X = 2
-        self.CNN_LSTM = 3
-        self.SENTIMENT_LSTM = 4
+        #################################################
 
-        self.pushButton_X_test.clicked.connect(lambda: self.browseFile(self.TEST_SET_X))
-        self.pushButton_Y_test.clicked.connect(lambda: self.browseFile(self.TEST_SET_Y))
+        self.pushButton_testData.clicked.connect(lambda: self.browseFile("testdata"))
+        self.pushButton_predictions.clicked.connect(lambda: self.browseFile("predictions"))
         self.pushButton_deposit.clicked.connect(self.deposit)
-        self.pushButton_setStopLoss.clicked.connect(self.show_popup)
+        self.pushButton_showMovements.clicked.connect(self.open_window)
         self.pushButton_start.clicked.connect(self.start)
 
-    def retranslateUi(self, MainScreen):
+    def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainScreen.setWindowTitle(_translate("MainScreen", "Exploring the Influence of News on Bitcoin Price"))
-        self.groupBox_2.setTitle(_translate("MainScreen", "Upload Datasets"))
-        self.label.setText(_translate("MainScreen", "X_test"))
-        self.pushButton_X_test.setText(_translate("MainScreen", "Browse"))
-        self.label_4.setText(_translate("MainScreen", "y_test"))
-        self.pushButton_Y_test.setText(_translate("MainScreen", "Browse"))
-        self.groupBox.setTitle(_translate("MainScreen", "Select a model"))
-        self.radioButton_CNNLSTM.setText(_translate("MainScreen", "CNN-LSTM"))
-        self.radioButton_SentimentLSTM.setText(_translate("MainScreen", "Sentiment-LSTM"))
-        self.groupBox_3.setTitle(_translate("MainScreen", "Balance"))
-        self.label_10.setText(_translate("MainScreen", "0.00000000 BTC / $0.00"))
-        self.pushButton_deposit.setText(_translate("MainScreen", "Deposit"))
-        self.groupBox_5.setTitle(_translate("MainScreen", "Options"))
-        self.pushButton_setStopLoss.setText(_translate("MainScreen", "Set Stop Loss"))
-        self.pushButton_start.setText(_translate("MainScreen", "Start"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "The Influence of News on Bitcoin Price"))
+        self.label.setText(_translate("MainWindow", "Test data"))
+        self.pushButton_testData.setText(_translate("MainWindow", "Browse"))
+        self.label_4.setText(_translate("MainWindow", "Predictions"))
+        self.pushButton_predictions.setText(_translate("MainWindow", "Browse"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "Balance"))
+        self.label_balance.setText(_translate("MainWindow", "0.00000000 BTC / $0.00"))
+        self.pushButton_deposit.setText(_translate("MainWindow", "Deposit"))
+        self.pushButton_showMovements.setText(_translate("MainWindow", "Show Movements"))
+        self.pushButton_start.setText(_translate("MainWindow", "Start"))
 
     def browseFile(self, id):
-        filenames = QFileDialog.getOpenFileName(self, 'Open File', 'c\\', '*.csv *.txt')
-        firstFile = filenames[0]
-
-        if (id == self.TEST_SET_X):
-            print('X_test: ' + firstFile)
-            self.lineEdit_X_test.setText(firstFile)
+        if (id == "testdata"):
+            filenames = QFileDialog.getOpenFileName(self, 'Open File', 'c\\', '*.csv *.txt')
+            firstFile = filenames[0]
+            self.lineEdit_testData.setText(firstFile)
         else:
-            print('y_test: ' + firstFile)
-            self.lineEdit_Y_test.setText(firstFile)
+            filenames = QFileDialog.getOpenFileName(self, 'Open File', 'c\\')
+            firstFile = filenames[0]
+            self.lineEdit_predictions.setText(firstFile)
 
     def deposit(self):
         text, ok = QInputDialog.getText(self, "Deposit", "Update your account", QLineEdit.Normal)
 
         if ok and text is not None:
             self.balance_usd = float(text)
-            self.balance_btc = round(self.balance_usd / self.CURRENT_BTC_PRICE, 8)
-            self.label_10.setText(str(self.balance_btc) + " BTC / $" + str(self.balance_usd))
+            self.balance_btc = round(self.balance_usd / self.current_bitcoin_price, 8)
+            self.label_balance.setText(str(self.balance_btc) + " BTC / $" + str(self.balance_usd))
             self.INITIAL_BALANCE_USER = self.balance_usd
 
-    def update_balance(self):
-        price_change = (self.balance_usd * self.CHANGE) / 100
-        self.balance_usd += price_change
-        self.balance_btc = round(self.balance_usd / self.CURRENT_BTC_PRICE, 8)
-        self.label_10.setText(str(self.balance_btc) + " BTC / $" + str(round(self.balance_usd, 2)))
+    def open_window(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_MovementsWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def show_popup(self):
         message = QMessageBox()
@@ -275,40 +235,40 @@ class Ui_MainWindow(QDialog):
         message.setIcon(QMessageBox.Information)
         message.exec_()
 
-    def show_popup_error(self):
-        message = QMessageBox()
-        message.setWindowTitle("Error")
-        message.setText(self.error_message)
-        message.setIcon(QMessageBox.Critical)
-        message.exec_()
-
     def start(self):
-        self.textEdit_log.setText("")
 
-        self.CURRENT_BTC_PRICE = INITIAL_BTC_PRICE
-
-        self.x_test_path = self.lineEdit_X_test.text()
-        self.y_test_path = self.lineEdit_Y_test.text()
+        self.testData_path = self.lineEdit_testData.text()
+        self.predictions_path = self.lineEdit_predictions.text()
 
         if self.isValid():
-            init_model(self)
+
+            self.movements = {}
+
+            self.textEdit_log.setText("")
+            self.current_bitcoin_price = INITIAL_BITCOIN_PRICE
+
+            df_test = pd.read_csv(self.testData_path)
+            predictions = np.loadtxt(self.predictions_path, delimiter=',')
+            y_test = np.loadtxt(OUTPUT_PATH + "y_test", delimiter=',')
+            self.samples_count = len(y_test)
+
             self.trueCount = 0
-            for i in range(0, self.last):
+            for i in range(self.samples_count):
                 # Daily BTC-USD
-                self.CURRENT_BTC_PRICE = self.price_data[i][6]
+                self.current_bitcoin_price = df_test.iloc[i, CLOSE_COLUMN]
+
+                # Date and Percent change
+                self.date = df_test.iloc[i, DATE_COLUMN]
+                self.change = df_test.iloc[i, CHANGE_COLUMN]
 
                 # Price movement
-                if self.price_data[i][-1] == 1:
+                if y_test[i] == 1:
                     self.ACUTAL_MOVEMENT = INCREASE
                 else:
                     self.ACUTAL_MOVEMENT = DECREASE
 
-                # Date and Percent change
-                self.DATE = self.price_data[i][0]
-                self.CHANGE = self.price_data[i][-4]
-
                 # Movement prediction
-                if self.predictions[i] == 1:
+                if predictions[i] == 1:
                     self.CURRENT_MOVEMENT_PREDICTION = INCREASE
                     self.update_balance()
                 else:
@@ -316,18 +276,39 @@ class Ui_MainWindow(QDialog):
 
                 if self.CURRENT_MOVEMENT_PREDICTION == self.ACUTAL_MOVEMENT:
                     self.trueCount += 1
+                    self.movements[self.date] = True
+                else:
+                    self.movements[self.date] = False
 
                 self.print_log(MESSAGE_DAILY_STATUS)
 
+        save('LSTM-Sentiment_movements.json', self.movements)
+        plot_movements(self.testData_path)
+
         self.print_log(MESSAGE_PERIOD)
         self.print_log(MESSAGE_RESULT)
-        self.print_log(MESSAGE_AVERAGE)
+        self.print_log(MESSAGE_PROFIT)
         self.print_log(MESSAGE_COUNT)
+        self.print_log(MESSAGE_AVG)
 
-    def without_using_the_model(self):
-        initial_btc_amount = self.INITIAL_BALANCE_USER / self.INITIAL_BTC_PRICE
-        current_money = initial_btc_amount * self.CURRENT_BTC_PRICE
-        return str(self.INITIAL_BALANCE_USER - current_money)
+    def isValid(self):
+        if len(self.testData_path) > 0 and len(self.predictions_path) > 0:
+            if self.label_balance.text() != "0.00000000 BTC / $0.00":
+                return True
+            else:
+                self.error_message = "Check your balance!"
+                self.show_popup_error()
+                return False
+        else:
+            self.error_message = "Please, fill all fields!"
+            self.show_popup_error()
+            return False
+
+    def update_balance(self):
+        price_change = (self.balance_usd * self.change) / 100
+        self.balance_usd += price_change
+        self.balance_btc = round(self.balance_usd / self.current_bitcoin_price, 8)
+        self.label_balance.setText(str(self.balance_btc) + " BTC / $" + str(round(self.balance_usd, 2)))
 
     def print_log(self, message_code):
         self.textEdit_log.setText(self.textEdit_log.toPlainText() + self.get_message(message_code))
@@ -339,55 +320,47 @@ class Ui_MainWindow(QDialog):
                                   "actual = {:4}, " \
                                   "price_change = {:5}, " \
                                   "current_balance = ${:2}, " \
-                                  "total_profit = {:5} \n".format(self.DATE,
+                                  "total_profit = {:5} \n".format(self.date,
                                                                   str(self.CURRENT_MOVEMENT_PREDICTION),
                                                                   str(self.ACUTAL_MOVEMENT),
-                                                                  str(self.CHANGE),
+                                                                  str(self.change),
                                                                   str(self.balance_usd),
                                                                   str(round(
                                                                       self.balance_usd - self.INITIAL_BALANCE_USER, 2))
                                                                   ),
             MESSAGE_RESULT: "\n" + "initial BTC price = {:2}, "
-                                   "current BTC price = {:2}, "
-                                   "total profit without using the model = {:2}".format(
-                self.INITIAL_BTC_PRICE,
-                self.CURRENT_BTC_PRICE,
-                self.without_using_the_model()),
-            MESSAGE_PERIOD: "\n" + "test period = " + str(len(self.price_data)) + " days",
-            MESSAGE_AVERAGE: "\n" + "average daily profit = {:2}, "
-                                    "average weekly profit = {:2}, "
-                                    "average monthly profit = {:2}".format(
-                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / len(self.price_data),
-                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (len(self.price_data) / 7),
-                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (len(self.price_data) / 30)),
-            MESSAGE_COUNT: "\n" + "Total: {}, True: {}, False: {}".format(self.total, self.trueCount,
-                                                                          self.total - self.trueCount),
+                                   "current BTC price = {:2}\n".format(
+                INITIAL_BITCOIN_PRICE,
+                self.current_bitcoin_price),
+            MESSAGE_PROFIT: "total profit with the model = ${:.2f}, "
+                            "total profit without the model = ${:.2f}".format(
+                self.balance_usd - self.INITIAL_BALANCE_USER, self.without_using_the_model()),
+            MESSAGE_PERIOD: "\n" + "test period = " + str(self.samples_count) + " days",
+            MESSAGE_AVERAGE: "\n" + "average daily profit = {:.2f}, "
+                                    "average weekly profit = {:.2f}, "
+                                    "average monthly profit = {:.2f}".format(
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / self.samples_count,
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (self.samples_count / 7),
+                round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (self.samples_count / 30)),
+            MESSAGE_COUNT: "\n" + "Total: {}, True: {}, False: {}".format(self.samples_count, self.trueCount,
+                                                                          self.samples_count - self.trueCount),
+            MESSAGE_AVG: "\n" + "average: {:.2f}".format(self.trueCount / self.samples_count),
             MESSAGE_DEFAULT: ""
 
         }.get(message_code, MESSAGE_DEFAULT)
 
-    def isValid(self):
-        if len(self.x_test_path) > 0 and len(self.y_test_path) > 0:
-            if self.label_10.text() != "0.00000000 BTC / $0.00":
-                return True
-            else:
-                self.error_message = "Check your balance!"
-                self.show_popup_error()
-                return False
-        else:
-            self.error_message = "Please, fill all fields!"
-            self.show_popup_error()
-            return False
+    def without_using_the_model(self):
+        initial_btc_amount = self.INITIAL_BALANCE_USER / INITIAL_BITCOIN_PRICE
+        current_money = initial_btc_amount * self.current_bitcoin_price
+        return current_money - self.INITIAL_BALANCE_USER
 
 
 if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    app.setWindowIcon(QIcon('img/ytu_logo.png'))
-
-    MainScreen = QtWidgets.QMainWindow()
+    MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainScreen)
-    MainScreen.show()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
     sys.exit(app.exec_())
