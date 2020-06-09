@@ -289,7 +289,7 @@ class Ui_MainWindow(QDialog):
         self.print_log(MESSAGE_RESULT)
         self.print_log(MESSAGE_PROFIT)
         self.print_log(MESSAGE_COUNT)
-        self.print_log(MESSAGE_AVG)
+        self.print_log(MESSAGE_ACC)
 
     def isValid(self):
         if len(self.testData_path) > 0 and len(self.predictions_path) > 0:
@@ -344,7 +344,7 @@ class Ui_MainWindow(QDialog):
                 round(self.balance_usd - self.INITIAL_BALANCE_USER, 2) / (self.samples_count / 30)),
             MESSAGE_COUNT: "\n" + "Total: {}, True: {}, False: {}".format(self.samples_count, self.trueCount,
                                                                           self.samples_count - self.trueCount),
-            MESSAGE_AVG: "\n" + "average: {:.2f}".format(self.trueCount / self.samples_count),
+            MESSAGE_ACC: "\n" + "accuracy: %{:.2f}".format(self.trueCount / self.samples_count),
             MESSAGE_DEFAULT: ""
 
         }.get(message_code, MESSAGE_DEFAULT)
