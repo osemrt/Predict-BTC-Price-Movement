@@ -10,8 +10,7 @@ def load_pet(filename):
     return pet
 
 
-def plot_movements(testData_path):
-    df_data = pd.read_csv(testData_path)
+def plot_movements(df_data):
     movements = load_pet('LSTM-Sentiment_movements.json')
 
     date = df_data['date'].values
