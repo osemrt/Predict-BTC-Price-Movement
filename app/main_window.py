@@ -8,25 +8,19 @@ from movements_window import Ui_MovementsWindow
 from util.json import save
 from util.plot import plot_movements
 
-
 class Ui_MainWindow(QDialog):
     def setupUi(self, MainWindow):
-
-        self.current_bitcoin_price = INITIAL_BITCOIN_PRICE
-
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(778, 543)
+        MainWindow.resize(716, 686)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("img/ytu_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setIconSize(QtCore.QSize(36, 36))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.splitter_7 = QtWidgets.QSplitter(self.centralwidget)
-        self.splitter_7.setGeometry(QtCore.QRect(20, 20, 740, 471))
-        self.splitter_7.setOrientation(QtCore.Qt.Vertical)
-        self.splitter_7.setObjectName("splitter_7")
-        self.groupBox_2 = QtWidgets.QGroupBox(self.splitter_7)
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
@@ -42,65 +36,66 @@ class Ui_MainWindow(QDialog):
         self.splitter = QtWidgets.QSplitter(self.splitter_4)
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
-        self.label = QtWidgets.QLabel(self.splitter)
-        self.label.setMinimumSize(QtCore.QSize(90, 0))
-        self.label.setMaximumSize(QtCore.QSize(90, 95545))
+        self.label_input = QtWidgets.QLabel(self.splitter)
+        self.label_input.setMinimumSize(QtCore.QSize(90, 0))
+        self.label_input.setMaximumSize(QtCore.QSize(90, 95545))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.label.setFont(font)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.lineEdit_testData = QtWidgets.QLineEdit(self.splitter)
-        self.lineEdit_testData.setMinimumSize(QtCore.QSize(300, 30))
+        self.label_input.setFont(font)
+        self.label_input.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_input.setObjectName("label_input")
+        self.lineEdit_input = QtWidgets.QLineEdit(self.splitter)
+        self.lineEdit_input.setMinimumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_testData.setFont(font)
-        self.lineEdit_testData.setObjectName("lineEdit_testData")
-        self.pushButton_testData = QtWidgets.QPushButton(self.splitter)
-        self.pushButton_testData.setMinimumSize(QtCore.QSize(120, 30))
-        self.pushButton_testData.setMaximumSize(QtCore.QSize(120, 30))
+        self.lineEdit_input.setFont(font)
+        self.lineEdit_input.setObjectName("lineEdit_input")
+        self.pushButton_input = QtWidgets.QPushButton(self.splitter)
+        self.pushButton_input.setMinimumSize(QtCore.QSize(120, 30))
+        self.pushButton_input.setMaximumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_testData.setFont(font)
-        self.pushButton_testData.setObjectName("pushButton_testData")
+        self.pushButton_input.setFont(font)
+        self.pushButton_input.setObjectName("pushButton_input")
         self.splitter_3 = QtWidgets.QSplitter(self.splitter_4)
         self.splitter_3.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_3.setObjectName("splitter_3")
-        self.label_4 = QtWidgets.QLabel(self.splitter_3)
-        self.label_4.setMinimumSize(QtCore.QSize(90, 0))
-        self.label_4.setMaximumSize(QtCore.QSize(90, 95545))
+        self.label_output = QtWidgets.QLabel(self.splitter_3)
+        self.label_output.setMinimumSize(QtCore.QSize(90, 0))
+        self.label_output.setMaximumSize(QtCore.QSize(90, 95545))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.label_4.setFont(font)
-        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_4.setObjectName("label_4")
-        self.lineEdit_predictions = QtWidgets.QLineEdit(self.splitter_3)
-        self.lineEdit_predictions.setMinimumSize(QtCore.QSize(300, 30))
+        self.label_output.setFont(font)
+        self.label_output.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_output.setObjectName("label_output")
+        self.lineEdit_output = QtWidgets.QLineEdit(self.splitter_3)
+        self.lineEdit_output.setMinimumSize(QtCore.QSize(300, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.lineEdit_predictions.setFont(font)
-        self.lineEdit_predictions.setObjectName("lineEdit_predictions")
-        self.pushButton_predictions = QtWidgets.QPushButton(self.splitter_3)
-        self.pushButton_predictions.setMinimumSize(QtCore.QSize(120, 30))
-        self.pushButton_predictions.setMaximumSize(QtCore.QSize(120, 30))
+        self.lineEdit_output.setFont(font)
+        self.lineEdit_output.setObjectName("lineEdit_output")
+        self.pushButton_output = QtWidgets.QPushButton(self.splitter_3)
+        self.pushButton_output.setMinimumSize(QtCore.QSize(120, 30))
+        self.pushButton_output.setMaximumSize(QtCore.QSize(120, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_predictions.setFont(font)
-        self.pushButton_predictions.setObjectName("pushButton_predictions")
+        self.pushButton_output.setFont(font)
+        self.pushButton_output.setObjectName("pushButton_output")
         self.verticalLayout.addWidget(self.splitter_4)
-        self.splitter_9 = QtWidgets.QSplitter(self.splitter_7)
+        self.verticalLayout_6.addWidget(self.groupBox_2)
+        self.splitter_9 = QtWidgets.QSplitter(self.centralwidget)
         self.splitter_9.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_9.setObjectName("splitter_9")
         self.splitter_6 = QtWidgets.QSplitter(self.splitter_9)
@@ -138,7 +133,7 @@ class Ui_MainWindow(QDialog):
         self.verticalLayout_3.addWidget(self.splitter_2)
         self.groupBox_5 = QtWidgets.QGroupBox(self.splitter_9)
         self.groupBox_5.setEnabled(True)
-        self.groupBox_5.setMaximumSize(QtCore.QSize(415, 16777215))
+        self.groupBox_5.setMaximumSize(QtCore.QSize(45454, 16777215))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.groupBox_5.setFont(font)
@@ -146,33 +141,95 @@ class Ui_MainWindow(QDialog):
         self.groupBox_5.setObjectName("groupBox_5")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_5)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.pushButton_showMovements = QtWidgets.QPushButton(self.groupBox_5)
-        self.pushButton_showMovements.setMinimumSize(QtCore.QSize(200, 30))
-        self.pushButton_showMovements.setMaximumSize(QtCore.QSize(430, 30))
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.label_startDate = QtWidgets.QLabel(self.groupBox_5)
+        self.label_startDate.setMinimumSize(QtCore.QSize(90, 0))
+        self.label_startDate.setMaximumSize(QtCore.QSize(90, 95545))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.pushButton_showMovements.setFont(font)
-        self.pushButton_showMovements.setObjectName("pushButton_showMovements")
-        self.verticalLayout_5.addWidget(self.pushButton_showMovements)
-        self.pushButton_start = QtWidgets.QPushButton(self.groupBox_5)
+        self.label_startDate.setFont(font)
+        self.label_startDate.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_startDate.setObjectName("label_startDate")
+        self.horizontalLayout.addWidget(self.label_startDate)
+        self.comboBox_startDate = QtWidgets.QComboBox(self.groupBox_5)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.comboBox_startDate.setFont(font)
+        self.comboBox_startDate.setObjectName("comboBox_startDate")
+        self.horizontalLayout.addWidget(self.comboBox_startDate)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label_endDate = QtWidgets.QLabel(self.groupBox_5)
+        self.label_endDate.setMinimumSize(QtCore.QSize(90, 0))
+        self.label_endDate.setMaximumSize(QtCore.QSize(90, 95545))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_endDate.setFont(font)
+        self.label_endDate.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_endDate.setObjectName("label_endDate")
+        self.horizontalLayout_2.addWidget(self.label_endDate)
+        self.comboBox_endDate = QtWidgets.QComboBox(self.groupBox_5)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.comboBox_endDate.setFont(font)
+        self.comboBox_endDate.setObjectName("comboBox_endDate")
+        self.horizontalLayout_2.addWidget(self.comboBox_endDate)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_5.addLayout(self.verticalLayout_2)
+        self.verticalLayout_6.addWidget(self.splitter_9)
+        self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_start.setMinimumSize(QtCore.QSize(200, 30))
-        self.pushButton_start.setMaximumSize(QtCore.QSize(430, 30))
+        self.pushButton_start.setMaximumSize(QtCore.QSize(45646, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_start.setFont(font)
         self.pushButton_start.setObjectName("pushButton_start")
-        self.verticalLayout_5.addWidget(self.pushButton_start)
-        self.textEdit_log = QtWidgets.QTextEdit(self.splitter_7)
-        self.textEdit_log.setMinimumSize(QtCore.QSize(740, 250))
-        self.textEdit_log.setMaximumSize(QtCore.QSize(740, 250))
+        self.verticalLayout_6.addWidget(self.pushButton_start)
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setMinimumSize(QtCore.QSize(0, 400))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.tabWidget.setFont(font)
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.tab)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.label_movements = QtWidgets.QLabel(self.tab)
+        self.label_movements.setText("")
+        self.label_movements.setScaledContents(True)
+        self.label_movements.setMinimumSize(QtCore.QSize(0, 0))
+        self.label_movements.setMaximumSize(QtCore.QSize(674, 351))
+        self.label_movements.setObjectName("label_movements")
+        self.verticalLayout_4.addWidget(self.label_movements)
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.tab_2)
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.textEdit_log = QtWidgets.QTextEdit(self.tab_2)
+        self.textEdit_log.setMinimumSize(QtCore.QSize(0, 0))
+        self.textEdit_log.setMaximumSize(QtCore.QSize(4564, 45454))
         self.textEdit_log.setObjectName("textEdit_log")
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.textEdit_log.setFont(font)
+        self.verticalLayout_7.addWidget(self.textEdit_log)
+        self.tabWidget.addTab(self.tab_2, "")
+        self.verticalLayout_6.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 778, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 716, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -180,38 +237,68 @@ class Ui_MainWindow(QDialog):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        #################################################
+        ##################################
 
-        self.pushButton_testData.clicked.connect(lambda: self.browseFile("testdata"))
-        self.pushButton_predictions.clicked.connect(lambda: self.browseFile("predictions"))
+        self.pushButton_input.clicked.connect(lambda: self.browseFile("input"))
+        self.pushButton_output.clicked.connect(lambda: self.browseFile("output"))
         self.pushButton_deposit.clicked.connect(self.deposit)
-        self.pushButton_showMovements.clicked.connect(self.open_window)
+        self.comboBox_startDate.currentTextChanged.connect(self.onStartDateChange)
         self.pushButton_start.clicked.connect(self.start)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "The Influence of News on Bitcoin Price"))
-        self.label.setText(_translate("MainWindow", "Test data"))
-        self.pushButton_testData.setText(_translate("MainWindow", "Browse"))
-        self.label_4.setText(_translate("MainWindow", "Predictions"))
-        self.pushButton_predictions.setText(_translate("MainWindow", "Browse"))
+        self.label_input.setText(_translate("MainWindow", "Input"))
+        self.pushButton_input.setText(_translate("MainWindow", "Browse"))
+        self.label_output.setText(_translate("MainWindow", "Output"))
+        self.pushButton_output.setText(_translate("MainWindow", "Browse"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Balance"))
         self.label_balance.setText(_translate("MainWindow", "0.00000000 BTC / $0.00"))
         self.pushButton_deposit.setText(_translate("MainWindow", "Deposit"))
-        self.pushButton_showMovements.setText(_translate("MainWindow", "Show Movements"))
+        self.label_startDate.setText(_translate("MainWindow", "Start Date:"))
+        self.label_endDate.setText(_translate("MainWindow", "End Date:"))
         self.pushButton_start.setText(_translate("MainWindow", "Start"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Movements"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Summary"))
+
+
 
     def browseFile(self, id):
-        if (id == "testdata"):
+        if (id == "input"):
             filenames = QFileDialog.getOpenFileName(self, 'Open File', 'c\\', '*.csv *.txt')
             firstFile = filenames[0]
-            self.lineEdit_testData.setText(firstFile)
+            self.lineEdit_input.setText(firstFile)
+
+            self.input_path = self.lineEdit_input.text()
+            self.df_test = pd.read_csv(self.input_path)
+            self.comboBox_startDate.addItems(self.df_test['date'])
+            self.startDate = self.comboBox_startDate.currentText()
+            self.comboBox_endDate.addItems(self.df_test['date'][self.df_test['date']>self.startDate])
+            self.endDate = self.comboBox_endDate.currentText()
+
         else:
             filenames = QFileDialog.getOpenFileName(self, 'Open File', 'c\\')
             firstFile = filenames[0]
-            self.lineEdit_predictions.setText(firstFile)
+            self.lineEdit_output.setText(firstFile)
+
+    def onStartDateChange(self):
+        self.startDate = self.comboBox_startDate.currentText()
+        self.comboBox_endDate.clear()
+        self.comboBox_endDate.addItems(self.df_test['date'][self.df_test['date'] > self.startDate])
+        self.endDate = self.comboBox_endDate.currentText()
+
+        self.row = self.df_test[self.df_test['date'] == self.startDate]['open']
+        self.current_bitcoin_price = round(self.row.values[0], 2)
+
+
+        if self.label_balance.text() != "0.00000000 BTC / $0.00":
+            self.balance_btc = round(self.balance_usd / self.current_bitcoin_price, 8)
+            self.label_balance.setText(str(self.balance_btc) + " BTC / $" + str(round(self.balance_usd, 2)))
+            self.INITIAL_BALANCE_USER = self.balance_usd
 
     def deposit(self):
         text, ok = QInputDialog.getText(self, "Deposit", "Update your account", QLineEdit.Normal)
@@ -237,29 +324,35 @@ class Ui_MainWindow(QDialog):
 
     def start(self):
 
-        self.testData_path = self.lineEdit_testData.text()
-        self.predictions_path = self.lineEdit_predictions.text()
+        self.output_path = self.lineEdit_output.text()
 
         if self.isValid():
 
             self.movements = {}
 
-            self.textEdit_log.setText("")
-            self.current_bitcoin_price = INITIAL_BITCOIN_PRICE
+            self.endDate = self.comboBox_endDate.currentText()
 
-            df_test = pd.read_csv(self.testData_path)
-            predictions = np.loadtxt(self.predictions_path, delimiter=',')
+            predictions = np.loadtxt(self.output_path, delimiter=',')
             y_test = np.loadtxt(OUTPUT_PATH + "y_test", delimiter=',')
-            self.samples_count = len(y_test)
+
+
+            self.textEdit_log.setText("")
+            self.row = self.df_test[self.df_test['date'] == self.startDate]['open']
+            self.current_bitcoin_price = round(self.row.values[0], 2)
+
+            self.df_new_test = self.df_test[self.df_test['date'] >= self.startDate]
+            self.df_new_test = self.df_new_test[self.df_new_test['date'] <= self.endDate]
+
+            self.samples_count = self.df_new_test.shape[0]
 
             self.trueCount = 0
             for i in range(self.samples_count):
                 # Daily BTC-USD
-                self.current_bitcoin_price = df_test.iloc[i, CLOSE_COLUMN]
+                self.current_bitcoin_price = self.df_new_test.iloc[i, CLOSE_COLUMN]
 
                 # Date and Percent change
-                self.date = df_test.iloc[i, DATE_COLUMN]
-                self.change = df_test.iloc[i, CHANGE_COLUMN]
+                self.date = self.df_new_test.iloc[i, DATE_COLUMN]
+                self.change = self.df_new_test.iloc[i, CHANGE_COLUMN]
 
                 # Price movement
                 if y_test[i] == 1:
@@ -280,10 +373,9 @@ class Ui_MainWindow(QDialog):
                 else:
                     self.movements[self.date] = False
 
-                self.print_log(MESSAGE_DAILY_STATUS)
-
         save('LSTM-Sentiment_movements.json', self.movements)
-        plot_movements(self.testData_path)
+        plot_movements(self.df_new_test)
+        self.label_movements.setPixmap(QtGui.QPixmap("./img/movements.png"))
 
         self.print_log(MESSAGE_PERIOD)
         self.print_log(MESSAGE_RESULT)
@@ -292,7 +384,7 @@ class Ui_MainWindow(QDialog):
         self.print_log(MESSAGE_ACC)
 
     def isValid(self):
-        if len(self.testData_path) > 0 and len(self.predictions_path) > 0:
+        if len(self.input_path) > 0 and len(self.output_path) > 0:
             if self.label_balance.text() != "0.00000000 BTC / $0.00":
                 return True
             else:
@@ -316,13 +408,9 @@ class Ui_MainWindow(QDialog):
     def get_message(self, message_code):
         return {
             MESSAGE_DAILY_STATUS: "date = {}, " \
-                                  "prediction =  {:4}, " \
-                                  "actual = {:4}, " \
                                   "price_change = {:5}, " \
                                   "current_balance = ${:2}, " \
                                   "total_profit = {:5} \n".format(self.date,
-                                                                  str(self.CURRENT_MOVEMENT_PREDICTION),
-                                                                  str(self.ACUTAL_MOVEMENT),
                                                                   str(self.change),
                                                                   str(self.balance_usd),
                                                                   str(round(
@@ -355,9 +443,9 @@ class Ui_MainWindow(QDialog):
         return current_money - self.INITIAL_BALANCE_USER
 
 
+
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
